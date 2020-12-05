@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace _01
+namespace _Number01
 {
     public class Number01Should
     {

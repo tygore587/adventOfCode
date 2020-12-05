@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace Number02
+namespace _Number02
 {
-    class Number02
+    public class Number02
     {
         static void Main(string[] args)
         {
@@ -32,7 +32,7 @@ namespace Number02
             Console.WriteLine(correctPasswords);
         }
 
-        static bool TryExtractRule(string combinedRule, out int minOccur, out int maxOccur, out string letter)
+        public static bool TryExtractRule(string combinedRule, out int minOccur, out int maxOccur, out string letter)
         {
             minOccur = -1;
             maxOccur = -1;
@@ -55,7 +55,7 @@ namespace Number02
             return true;
         }
         
-        static bool ExtractRuleAndPassoword(string input, out string rule, out string password)
+        public static bool ExtractRuleAndPassoword(string input, out string rule, out string password)
         {
             rule = null;
             password = null;

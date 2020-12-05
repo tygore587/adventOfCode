@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Helper;
 
-namespace _01
+namespace _Number01
 {
     public class Number01
     {
