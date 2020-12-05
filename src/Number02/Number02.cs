@@ -1,18 +1,15 @@
 ﻿using Helper;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace _Number02
 {
     public class Number02
     {
-        static void Main(string[] args)
+        public static int CountCorrectPasswordByFirstRule(IEnumerable<string> inputList)
         {
-            var inputList = InputHelper.GetInputAsList("input.txt");
-
-            var correctPasswords = inputList.Count(item =>
+            return inputList.Count(item =>
             {
                 var success = ExtractRuleAndPassoword(item, out var rule, out var password);
 
@@ -28,33 +25,29 @@ namespace _Number02
 
                 return false;
             });
-
-            Console.WriteLine(correctPasswords);
         }
 
-        public static bool TryExtractRule(string combinedRule, out int minOccur, out int maxOccur, out string letter)
+        public static int CountCorrectPasswordsBySecondRule(IEnumerable<string> inputList)
         {
-            minOccur = -1;
-            maxOccur = -1;
-            letter = null;
+            return inputList.Count(item =>
+            {
+                var success = ExtractRuleAndPassoword(item, out var rule, out var password);
 
-            var splitedRule = combinedRule.Split(" ");
+                if (!success)
+                    return false;
 
-            if (splitedRule.Length != 2)
+                if (TryExtractRule(rule, out var firstPosition, out var secondPosition, out string letter))
+                {
+                    if (firstPosition <= 0 || firstPosition >= secondPosition || secondPosition <= 0 || password.Length < secondPosition)
+                        return false;
+
+                    return string.Equals(password[firstPosition - 1].ToString(), letter) ^ string.Equals(password[secondPosition - 1].ToString(), letter);
+                }
+
                 return false;
-
-            letter = splitedRule[1].Trim();
-
-            var occurences = splitedRule[0].Split("-");
-
-            if (occurences.Length != 2)
-                return false;
-
-            minOccur = int.Parse(occurences[0]);
-            maxOccur = int.Parse(occurences[1]);
-            return true;
+            });
         }
-        
+
         public static bool ExtractRuleAndPassoword(string input, out string rule, out string password)
         {
             rule = null;
@@ -69,6 +62,39 @@ namespace _Number02
             password = rulePasswordSplit[1].Trim();
 
             return true;
+        }
+
+        public static bool TryExtractRule(string combinedRule, out int firstNumber, out int secondNumber, out string letter)
+        {
+            firstNumber = -1;
+            secondNumber = -1;
+            letter = null;
+
+            var splitedRule = combinedRule.Split(" ");
+
+            if (splitedRule.Length != 2)
+                return false;
+
+            letter = splitedRule[1].Trim();
+
+            var occurences = splitedRule[0].Split("-");
+
+            if (occurences.Length != 2)
+                return false;
+
+            firstNumber = int.Parse(occurences[0]);
+            secondNumber = int.Parse(occurences[1]);
+            return true;
+        }
+        private static void Main(string[] args)
+        {
+            var inputList = InputHelper.GetInputAsList("input.txt");
+
+            var correctPasswordsRule1 = CountCorrectPasswordByFirstRule(inputList);
+
+            var correctPasswordsRule2 = CountCorrectPasswordsBySecondRule(inputList);
+
+            Console.WriteLine($"Correct Passwords Rule 1: {correctPasswordsRule1} | Correct Passwords Rule 2: {correctPasswordsRule2}");
         }
     }
 }
