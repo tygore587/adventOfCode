@@ -13,7 +13,7 @@ namespace Helper
 
         public static async Task<IEnumerable<string>> GetInputAsListAsync(string fileName)
         {
-            var input = await File.ReadAllTextAsync("input.txt");
+            var input = await File.ReadAllTextAsync(fileName);
             return input.Split("\n");
         }
     }

@@ -8,7 +8,7 @@ namespace Number03
 {
     internal class Number03
     {
-        public static int CountSymbolsInWay(IEnumerable<string> inputs, string symbol, bool outputDebug = false)
+        public static int CountSymbolsInWay(IEnumerable<string> inputs, string symbol, int stepsRight, int stepsDown, bool outputDebug = false)
         {
             var inputList = inputs.Select(i => i.Trim()).ToList();
 
@@ -35,8 +35,8 @@ namespace Number03
                 if (treeHit)
                     treeHits++;
 
-                currentRow++;
-                var potentionalNextColoumn = currentColoumn + 3;
+                currentRow += stepsDown;
+                var potentionalNextColoumn = currentColoumn + stepsRight;
 
                 var rowLength = currentRowString.Length;
 
@@ -52,9 +52,19 @@ namespace Number03
 
             var inputList = InputHelper.GetInputAsList("input.txt");
 
-            var treeHits = CountSymbolsInWay(inputList, treeSymbol);
+            var treeHitsPart1 = CountSymbolsInWay(inputList, treeSymbol, 3, 1);
 
-            Console.WriteLine(treeHits);
+            Console.WriteLine(treeHitsPart1);
+
+            var (treeHits1R1D, treeHits3R1D, treeHits5R1D, treeHits7R1D, treeHits1R2D) = (
+                CountSymbolsInWay(inputList, treeSymbol, 1, 1),
+                CountSymbolsInWay(inputList, treeSymbol, 3, 1),
+                CountSymbolsInWay(inputList, treeSymbol, 5, 1),
+                CountSymbolsInWay(inputList, treeSymbol, 7, 1),
+                CountSymbolsInWay(inputList, treeSymbol, 1, 2)
+                );
+
+            Console.WriteLine(treeHits1R1D * treeHits3R1D * treeHits5R1D * treeHits7R1D * treeHits1R2D);
         }
     }
 }
