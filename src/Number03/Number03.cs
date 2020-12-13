@@ -50,7 +50,7 @@ namespace Number03
         {
             const string treeSymbol = "#";
 
-            var inputList = InputHelper.GetInputAsList("input.txt");
+            var inputList = InputHelper.GetInputAsList("input.txt").ToList();
 
             var treeHitsPart1 = CountSymbolsInWay(inputList, treeSymbol, 3, 1);
 
