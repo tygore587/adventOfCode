@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -15,23 +16,26 @@ namespace _Number04
 
         public static void Main(string[] args)
         {
-            var validPassports = SolvePart01("inputProd.txt");
-            Console.WriteLine(validPassports);
+            var passports = GetPassports("inputProd.txt").ToList();
+            var validPassportsPart01 = GetCountFromValidPassportsPart01(passports);
+            var validPassportsPart02 = GetCountFromValidPassportsPart02(passports);
+            
+            
+            Console.WriteLine($"Valid Passports Part01: {validPassportsPart01} | Valid Passports Part02: {validPassportsPart02}");
         }
-
-        private static int SolvePart01(string fileName)
+        
+        private static IEnumerable<Passport> GetPassports(string fileName)
         {
             var inputList = InputHelper.GetInputAsList(fileName, FileSeparator);
 
-            var passports = ExtractPassportsFromList(inputList);
-
-            return GetCountFromValidPassports(passports);
+            return ExtractPassportsFromList(inputList);
         }
 
-        public static int GetCountFromValidPassports(IEnumerable<Passport> passports)
-        {
-            return passports.Count(passport => passport.IsValid());
-        }
+        public static int GetCountFromValidPassportsPart01(IEnumerable<Passport> passports) =>
+            passports.Count(passport => passport.IsValidPart01());
+
+        public static int GetCountFromValidPassportsPart02(IEnumerable<Passport> passports) =>
+            passports.Count(passport => passport.IsValidPart02());
 
         public static IEnumerable<Passport> ExtractPassportsFromList(IEnumerable<string> inputs)
         {
@@ -44,7 +48,8 @@ namespace _Number04
 
                 var fields = Regex.Split(passportString, "[\n\\s]");
 
-                var fieldsDictionary = fields.Select(field => field.Split(":"))
+                var fieldsDictionary = fields
+                    .Select(field => field.Split(":"))
                     .Where(keyValueList => keyValueList.Length == 2)
                     .ToDictionary(kvList => kvList[0],kvList => kvList[1]);
                 
